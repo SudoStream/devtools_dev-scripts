@@ -40,16 +40,26 @@ val schoolsFileArray = Files.readAllLines(schoolsFilePath)
 val schoolsFileArrayScala = schoolsFileArray.toArray.toList
 val schools: ListBuffer[School] = new ListBuffer[School]()
 
+def maybeBlank(address: String) : String = {
+  val trimmedAddress = address.trim
+  if (trimmedAddress == "-") {
+    ""
+  } else {
+    trimmedAddress + ", "
+  }
+}
+
 for (line <- schoolsFileArrayScala) {
   val lineAsString = line.asInstanceOf[String]
   if (!lineAsString.contains("Address 1")) {
     val csvElements = lineAsString.split(",")
-    // LA Name,School Name,Address 1,Address 2,Post code,Phone
-    currentLocalAuthority = csvElements(0).trim
+    // LA Name,School Name,Address 1,Address 2,Address 3, Post code,Phone
+    currentLocalAuthority = csvElements(0).trim.replaceAll(" ","_").toUpperCase.replaceAll("&","AND")
     currentSchoolName = csvElements(1).trim
-    currentAddress = csvElements(2).trim + ", " + csvElements(3).trim
-    currentPostCode = csvElements(4).trim
-    currentTelephone = csvElements(5).trim
+    currentAddress = (maybeBlank(csvElements(2)) + maybeBlank(csvElements(3)) +
+      maybeBlank(csvElements(4).toLowerCase).capitalize).dropRight(2)
+    currentPostCode = csvElements(5).trim
+    currentTelephone = csvElements(6).trim
 
     val newSchool = School(
       name = currentSchoolName,
@@ -83,7 +93,7 @@ for (school <- schools) {
   writeLine(s"""    "address" : "${school.address}",""")
   writeLine(s"""    "postCode" : "${school.postCode}",""")
   writeLine(s"""    "telephone" : "${school.telephone}",""")
-  writeLine(s"""    "localAuthority" : "${school.telephone}",""")
+  writeLine(s"""    "localAuthority" : "${school.localAuthority}",""")
   writeLine(s"""    "country" : "SCOTLAND"""")
   writeLine(s"""  }$comma""")
 }
