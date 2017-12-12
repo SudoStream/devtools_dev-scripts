@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 export USER_READER_SERVICE_PORT=`kubectl get services | grep "user-reader" | awk '{ print $5 }' | awk -F"," '{ print$2 }' | awk -F":" '{ print $2 }' | awk -F"/" '{ print $1}'`
 export USER_READER_SERVICE_HOST=`minikube service "user-reader" --url | grep ${USER_READER_SERVICE_PORT} | awk -F"/" '{ print $3 }' | awk -F":" '{ print $1 }'`
 echo "USER_READER_SERVICE : ${USER_READER_SERVICE_HOST}:${USER_READER_SERVICE_PORT}"
