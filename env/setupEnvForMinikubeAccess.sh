@@ -13,3 +13,7 @@ echo "USER_WRITER_SERVICE : ${USER_WRITER_SERVICE_HOST}:${USER_WRITER_SERVICE_PO
 export CLASSTIMETABLE_WRITER_SERVICE_PORT=`kubectl get services | grep "classtimetable-writer" | awk '{ print $5 }' | awk -F"," '{ print$1 }' | awk -F":" '{ print $2 }' | awk -F"/" '{ print $1}'`
 export CLASSTIMETABLE_WRITER_SERVICE_HOST=`minikube service "classtimetable-writer" --url | grep ${CLASSTIMETABLE_WRITER_SERVICE_PORT} | awk -F"/" '{ print $3 }' | awk -F":" '{ print $1 }'`
 echo "CLASSTIMETABLE_WRITER_SERVICE : ${CLASSTIMETABLE_WRITER_SERVICE_HOST}:${CLASSTIMETABLE_WRITER_SERVICE_PORT}"
+
+export CLASSTIMETABLE_READER_SERVICE_PORT=`kubectl get services | grep "classtimetable-reader" | awk '{ print $5 }' | awk -F"," '{ print$1 }' | awk -F":" '{ print $2 }' | awk -F"/" '{ print $1}'`
+export CLASSTIMETABLE_READER_SERVICE_HOST=`minikube service "classtimetable-reader" --url | grep ${CLASSTIMETABLE_READER_SERVICE_PORT} | awk -F"/" '{ print $3 }' | awk -F":" '{ print $1 }'`
+echo "CLASSTIMETABLE_READER_SERVICE : ${CLASSTIMETABLE_READER_SERVICE_HOST}:${CLASSTIMETABLE_READER_SERVICE_PORT}"
